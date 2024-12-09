@@ -1,19 +1,33 @@
 package pl.put.poznan.sortingmadness.logic.algorithms;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.put.poznan.sortingmadness.logic.SortingStrategy;
+
 import java.util.List;
 import java.util.Map;
 
-public class QuickSort {
+public class QuickSort implements SortingStrategy {
+    private static final Logger logger = LoggerFactory.getLogger(QuickSort.class);
 
-    public static Result sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
+    @Override
+    public Map<String, Object> sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
+        logger.info("Starting QuickSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
+
         long startTime = System.nanoTime();
         int iterations = sortRecursive(data, 0, data.size() - 1, key, direction, maxIterations, new int[]{0});
         long duration = System.nanoTime() - startTime;
 
-        return new Result(data, duration / 1_000_000.0);
+        logger.info("QuickSort completed in {} ms.", duration / 1_000_000.0);
+
+        // Return result as a Map
+        return Map.of(
+                "sortedData", data,
+                "executionTime", duration / 1_000_000.0
+        );
     }
 
-    private static int sortRecursive(List<Map<String, String>> data, int low, int high, String key, String direction, int maxIterations, int[] iterations) {
+    private int sortRecursive(List<Map<String, String>> data, int low, int high, String key, String direction, int maxIterations, int[] iterations) {
         if (low < high && (iterations[0] < maxIterations || maxIterations == 0)) {
             int pivotIndex = partition(data, low, high, key, direction, maxIterations, iterations);
 
@@ -23,7 +37,7 @@ public class QuickSort {
         return iterations[0];
     }
 
-    private static int partition(List<Map<String, String>> data, int low, int high, String key, String direction, int maxIterations, int[] iterations) {
+    private int partition(List<Map<String, String>> data, int low, int high, String key, String direction, int maxIterations, int[] iterations) {
         String pivotValue = data.get(high).get(key);
         int i = low - 1;
 
@@ -51,31 +65,13 @@ public class QuickSort {
         return i + 1;
     }
 
-    private static int compareValues(String value1, String value2) {
+    private int compareValues(String value1, String value2) {
         try {
             int int1 = Integer.parseInt(value1);
             int int2 = Integer.parseInt(value2);
             return Integer.compare(int1, int2);
         } catch (NumberFormatException e) {
             return value1.compareTo(value2);
-        }
-    }
-
-    public static class Result {
-        private final List<Map<String, String>> sortedData;
-        private final double executionTime;
-
-        public Result(List<Map<String, String>> sortedData, double executionTime) {
-            this.sortedData = sortedData;
-            this.executionTime = executionTime;
-        }
-
-        public List<Map<String, String>> getSortedData() {
-            return sortedData;
-        }
-
-        public double getExecutionTime() {
-            return executionTime;
         }
     }
 }

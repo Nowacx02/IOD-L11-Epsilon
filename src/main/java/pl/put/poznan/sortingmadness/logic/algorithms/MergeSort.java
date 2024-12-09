@@ -1,20 +1,34 @@
 package pl.put.poznan.sortingmadness.logic.algorithms;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.put.poznan.sortingmadness.logic.SortingStrategy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MergeSort {
+public class MergeSort implements SortingStrategy {
+    private static final Logger logger = LoggerFactory.getLogger(MergeSort.class);
 
-    public static Result sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
+    @Override
+    public Map<String, Object> sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
+        logger.info("Starting MergeSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
+
         long startTime = System.nanoTime();
         List<Map<String, String>> sortedData = mergeSort(data, key, direction, maxIterations, new int[]{0});
         long duration = System.nanoTime() - startTime;
 
-        return new Result(sortedData, duration / 1_000_000.0);
+        logger.info("MergeSort completed in {} ms.", duration / 1_000_000.0);
+
+        // Return result as a Map
+        return Map.of(
+                "sortedData", sortedData,
+                "executionTime", duration / 1_000_000.0
+        );
     }
 
-    private static List<Map<String, String>> mergeSort(List<Map<String, String>> data, String key, String direction, int maxIterations, int[] iterations) {
+    private List<Map<String, String>> mergeSort(List<Map<String, String>> data, String key, String direction, int maxIterations, int[] iterations) {
         if (data.size() <= 1) return data;
 
         int mid = data.size() / 2;
@@ -24,7 +38,7 @@ public class MergeSort {
         return merge(left, right, key, direction, maxIterations, iterations);
     }
 
-    private static List<Map<String, String>> merge(List<Map<String, String>> left, List<Map<String, String>> right, String key, String direction, int maxIterations, int[] iterations) {
+    private List<Map<String, String>> merge(List<Map<String, String>> left, List<Map<String, String>> right, String key, String direction, int maxIterations, int[] iterations) {
         List<Map<String, String>> merged = new ArrayList<>();
         int i = 0, j = 0;
 
@@ -48,31 +62,13 @@ public class MergeSort {
         return merged;
     }
 
-    private static int compareValues(String value1, String value2) {
+    private int compareValues(String value1, String value2) {
         try {
             int int1 = Integer.parseInt(value1);
             int int2 = Integer.parseInt(value2);
             return Integer.compare(int1, int2);
         } catch (NumberFormatException e) {
             return value1.compareTo(value2);
-        }
-    }
-
-    public static class Result {
-        private final List<Map<String, String>> sortedData;
-        private final double executionTime;
-
-        public Result(List<Map<String, String>> sortedData, double executionTime) {
-            this.sortedData = sortedData;
-            this.executionTime = executionTime;
-        }
-
-        public List<Map<String, String>> getSortedData() {
-            return sortedData;
-        }
-
-        public double getExecutionTime() {
-            return executionTime;
         }
     }
 }
