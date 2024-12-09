@@ -12,7 +12,7 @@
 
     <groupId>pl.put.poznan</groupId>
     <artifactId>sorting-madness</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
 
     <properties>
         <java.version>11</java.version>
@@ -45,7 +45,6 @@
 
     <build>
         <plugins>
-            <!-- Spring Boot Maven Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

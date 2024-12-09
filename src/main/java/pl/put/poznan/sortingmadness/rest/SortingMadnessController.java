@@ -19,21 +19,13 @@ public class SortingMadnessController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public Map<String, Object> sort(@RequestBody SortingRequest request) {
-        // Debug komunikaty w konsoli
         System.out.println("Received request: " + request);
 
-        // Walidacja pustych danych
         List<Map<String, String>> data = request.getData();
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("Dataset is empty or null.");
         }
 
-        // Walidacja, czy wybrano przynajmniej jeden algorytm sortujący
-        if (request.getSortingParameters() == null || request.getSortingParameters().isEmpty()) {
-            throw new IllegalArgumentException("No sorting algorithms specified.");
-        }
-
-        // Walidacja, czy wszystkie kolumny istnieją w danych
         List<String> keysToSort = request.getKeysToSort();
         for (String key : keysToSort) {
             boolean columnExists = data.stream().anyMatch(map -> map.containsKey(key));
@@ -44,41 +36,57 @@ public class SortingMadnessController {
 
         Integer globalMaxIterations = request.getGlobalMaxIterations();
 
-        // Zbiór wyników dla każdego algorytmu
         Map<String, Object> finalResult = new HashMap<>();
 
-        // Iteracja po każdym algorytmie w liście parametrów
-        for (SortingRequest.SortingParameter param : request.getSortingParameters()) {
+        List<SortingRequest.SortingParameter> sortingParameters = request.getSortingParameters();
+
+        // Jeśli użytkownik nie podał parametrów sortowania, ustaw domyślne
+        if (sortingParameters == null || sortingParameters.isEmpty()) {
+            sortingParameters = List.of(new SortingRequest.SortingParameter());
+        }
+
+        for (SortingRequest.SortingParameter param : sortingParameters) {
             String algorithm = param.getSortingAlgorithms();
+
+            // Jeśli algorytm nie został podany, wybierz domyślny
+            if (algorithm == null || algorithm.isBlank()) {
+                //algorithm = "quick"; // Możemy tutaj zmienić domyślny algorytm
+                int size = data.size();
+                if (size<=10){
+                    algorithm = "bubble";
+                }
+                else if(size<=100)
+                    algorithm = "selection";
+                else if (size<=1000)
+                    algorithm = "insertion";
+                else if (size<=5000)
+                    algorithm = "counting";
+                else if (size<=10000)
+                    algorithm = "merge";
+                else
+                    algorithm = "quick";
+            }
+
             String direction = param.getDirections();
-
-            System.out.println("Sorting with algorithm: " + algorithm + ", direction: " + direction);
-
-            // Walidacja algorytmu
-            if (!List.of("bubble", "insertion", "selection", "quick", "merge", "counting")
-                    .contains(algorithm.toLowerCase())) {
-                throw new IllegalArgumentException("Unknown sorting algorithm: " + algorithm);
+            if (direction == null || direction.isBlank()) {
+                throw new IllegalArgumentException("Sorting direction must be specified.");
             }
 
             int maxIterations = (param.getMaxIterations() != null)
                     ? param.getMaxIterations()
-                    : ((globalMaxIterations != null) ? globalMaxIterations : 0); // Default: no limit
+                    : ((globalMaxIterations != null) ? globalMaxIterations : 0);
 
-            // Każdy algorytm musi operować na kopii danych
             List<Map<String, String>> inputDataCopy = new ArrayList<>(data);
 
             for (String key : keysToSort) {
                 Map<String, Object> result = sortingMadness.sortData(inputDataCopy, key, algorithm, direction, maxIterations);
-
-                // Dodanie wyniku dla danego algorytmu i klucza do finalnego rezultatu
                 finalResult.put(algorithm + "-" + key, result);
 
                 System.out.println("Result for algorithm " + algorithm + " on key " + key + ": " + result);
             }
         }
 
-
-
         return finalResult;
     }
 }
+
