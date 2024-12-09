@@ -1,46 +1,47 @@
 package pl.put.poznan.sortingmadness.rest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.sortingmadness.logic.SortingMadness;
 
-import java.util.Arrays;
-
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/{text}")
+@RequestMapping("/sort")
 public class SortingMadnessController {
 
     private static final Logger logger = LoggerFactory.getLogger(SortingMadnessController.class);
+    private final SortingMadness sortingMadness;
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public String get(@PathVariable String text,
-                              @RequestParam(value="transforms", defaultValue="upper,escape") String[] transforms) {
-
-        // log the parameters
-        logger.debug(text);
-        logger.debug(Arrays.toString(transforms));
-
-        // perform the transformation, you should run your logic here, below is just a silly example
-        SortingMadness transformer = new SortingMadness(transforms);
-        return transformer.transform(text);
+    public SortingMadnessController() {
+        this.sortingMadness = new SortingMadness();
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public String post(@PathVariable String text,
-                      @RequestBody String[] transforms) {
+    public List<Map<String, String>> sort(@RequestBody SortingRequest request) {
+        logger.debug("Received request: {}", request);
 
-        // log the parameters
-        logger.debug(text);
-        logger.debug(Arrays.toString(transforms));
+        List<Map<String, String>> data = request.getData();
+        List<String> keysToSort = request.getKeysToSort();
 
-        // perform the transformation, you should run your logic here, below is just a silly example
-        SortingMadness transformer = new SortingMadness(transforms);
-        return transformer.transform(text);
+        for (SortingRequest.SortingParameter param : request.getSortingParameters()) {
+            String algorithm = param.getSortingAlgorithms();
+            String direction = param.getDirections();
+            int maxIterations = param.getMaxIterations();
+
+            for (String key : keysToSort) {
+                // Przekształć dane na listę intów lub Stringów do posortowania
+                List<Map<String, String>> sortedData = sortingMadness.sortData(data, key, algorithm, direction, maxIterations);
+
+                // Nadpisz posortowaną listę
+                data = sortedData;
+            }
+        }
+
+        return data;
     }
-
-
-
 }
-
-

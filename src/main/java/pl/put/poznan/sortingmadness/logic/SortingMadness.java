@@ -1,18 +1,27 @@
 package pl.put.poznan.sortingmadness.logic;
 
-/**
- * This is just an example to show that the logic should be outside the REST service.
- */
+import pl.put.poznan.sortingmadness.logic.algorithms.InsertionSort;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class SortingMadness {
 
-    private final String[] transforms;
+    public SortingMadness() {}
 
-    public SortingMadness(String[] transforms){
-        this.transforms = transforms;
-    }
+    public List<Map<String, String>> sortData(List<Map<String, String>> data, String key, String algorithm, String direction, int maxIterations) {
+        // Wyodrębnij dane do posortowania
+        List<Map<String, String>> sortedData = new ArrayList<>(data);
 
-    public String transform(String text){
-        // of course, normally it would do something based on the transforms
-        return text.toUpperCase();
+        switch (algorithm.toLowerCase()) {
+            case "insertion":
+                sortedData = InsertionSort.sort(sortedData, key, direction, maxIterations);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown sorting algorithm: " + algorithm);
+        }
+
+        return sortedData;
     }
 }
