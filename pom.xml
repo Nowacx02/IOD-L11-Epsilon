@@ -12,7 +12,7 @@
 
     <groupId>pl.put.poznan</groupId>
     <artifactId>sorting-madness</artifactId>
-    <version>0.7</version>
+    <version>0.8</version>
 
     <properties>
         <java.version>11</java.version>
