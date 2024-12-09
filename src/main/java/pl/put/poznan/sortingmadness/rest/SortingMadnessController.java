@@ -10,7 +10,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/sort")
 public class SortingMadnessController {
-    private static final Logger logger = LoggerFactory.getLogger(SortingMadness.class);
 
     private final SortingMadness sortingMadness;
 
@@ -20,7 +19,7 @@ public class SortingMadnessController {
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
     public Map<String, Object> sort(@RequestBody SortingRequest request) {
-        logger.debug("Received request: " + request );
+        System.out.println("Received request: " + request);
 
         List<Map<String, String>> data = request.getData();
         if (data == null || data.isEmpty()) {
@@ -82,6 +81,8 @@ public class SortingMadnessController {
             for (String key : keysToSort) {
                 Map<String, Object> result = sortingMadness.sortData(inputDataCopy, key, algorithm, direction, maxIterations);
                 finalResult.put(algorithm + "-" + key, result);
+
+                System.out.println("Result for algorithm " + algorithm + " on key " + key + ": " + result);
             }
         }
 
