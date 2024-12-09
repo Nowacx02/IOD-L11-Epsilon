@@ -3,13 +3,19 @@ package pl.put.poznan.sortingmadness.logic;
 import pl.put.poznan.sortingmadness.logic.algorithms.BubbleSort;
 import pl.put.poznan.sortingmadness.logic.algorithms.InsertionSort;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SortingMadness {
 
     public SortingMadness() {}
 
     public Map<String, Object> sortData(List<Map<String, String>> data, String key, String algorithm, String direction, int maxIterations) {
+        if (data == null || data.isEmpty()) {
+            throw new IllegalArgumentException("Dataset is empty or null.");
+        }
+
         if ("bubble".equalsIgnoreCase(algorithm)) {
             BubbleSort.Result result = BubbleSort.sort(data, key, direction, maxIterations);
             return createResultMap(result);

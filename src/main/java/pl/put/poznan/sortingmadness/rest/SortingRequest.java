@@ -16,6 +16,10 @@ public class SortingRequest {
     @JsonProperty("data")
     private List<Map<String, String>> data;
 
+    @JsonProperty("globalMaxIterations")
+    private Integer globalMaxIterations;
+
+    // Gettery i settery
     public List<String> getKeysToSort() {
         return keysToSort;
     }
@@ -40,12 +44,20 @@ public class SortingRequest {
         this.data = data;
     }
 
+    public Integer getGlobalMaxIterations() {
+        return globalMaxIterations;
+    }
+
+    public void setGlobalMaxIterations(Integer globalMaxIterations) {
+        this.globalMaxIterations = globalMaxIterations;
+    }
+
     public static class SortingParameter {
         @JsonProperty("sortingAlgorithms")
         private String sortingAlgorithms;
 
         @JsonProperty("maxIterations")
-        private int maxIterations;
+        private Integer maxIterations;
 
         @JsonProperty("directions")
         private String directions;
@@ -58,11 +70,11 @@ public class SortingRequest {
             this.sortingAlgorithms = sortingAlgorithms;
         }
 
-        public int getMaxIterations() {
+        public Integer getMaxIterations() {
             return maxIterations;
         }
 
-        public void setMaxIterations(int maxIterations) {
+        public void setMaxIterations(Integer maxIterations) {
             this.maxIterations = maxIterations;
         }
 
