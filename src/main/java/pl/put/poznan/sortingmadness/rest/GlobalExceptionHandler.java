@@ -9,9 +9,25 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Klasa {@code GlobalExceptionHandler} zapewnia globalną obsługę wyjątków w aplikacji Spring.
+ * Umożliwia przechwycenie i odpowiednie przetwarzanie wyjątków, takich jak {@code IllegalArgumentException},
+ * oraz zwrócenie stosownego komunikatu błędu w odpowiedzi HTTP.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Obsługuje wyjątek {@code IllegalArgumentException}, który może wystąpić w czasie działania aplikacji.
+     * Tworzy standardowy format odpowiedzi błędu zawierający informacje o typie błędu oraz jego szczegółach.
+     *
+     * @param ex wyjątek {@code IllegalArgumentException}, który został przechwycony
+     * @return mapa zawierająca szczegóły błędu w formacie JSON, z polami:
+     *         <ul>
+     *         <li>{@code error}: opis ogólny błędu, np. "Invalid Request"</li>
+     *         <li>{@code message}: szczegółowa wiadomość wyciągnięta z wyjątku</li>
+     *         </ul>
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody

@@ -8,9 +8,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Klasa implementująca algorytm sortowania bąbelkowego.
+ * Algorytm przegląda dane i na każdej iteracji porównuje sąsiadujące elementy, swapując je jeśli są w złej kolejności.
+ * Algorytm powtarza ten proces, aż wszystkie elementy zostaną posortowane.
+ */
 public class BubbleSort implements SortingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(BubbleSort.class);
 
+    /**
+     * Metoda sortująca dane przy użyciu algorytmu sortowania bąbelkowego.
+     *
+     * @param data           lista map zawierających dane do posortowania
+     * @param key            klucz do użycia przy porównaniu wartości w mapach
+     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
+     * @return mapa zawierająca wyniki sortowania z danymi posortowanymi oraz czasem wykonania
+     */
     @Override
     public Map<String, Object> sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
         logger.info("Starting BubbleSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
@@ -48,6 +62,15 @@ public class BubbleSort implements SortingStrategy {
         );
     }
 
+    /**
+     * Porównuje dwie wartości i zwraca wynik porównania jako liczbę całkowitą.
+     * Jeśli wartości są liczbami całkowitymi, porównuje je jako liczby.
+     * Jeśli nie są liczbami, porównuje je jako ciągi znaków.
+     *
+     * @param value1 pierwsza wartość do porównania
+     * @param value2 druga wartość do porównania
+     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli są równe, 1 jeśli value1 > value2
+     */
     private static int compareValues(String value1, String value2) {
         try {
             int int1 = Integer.parseInt(value1);

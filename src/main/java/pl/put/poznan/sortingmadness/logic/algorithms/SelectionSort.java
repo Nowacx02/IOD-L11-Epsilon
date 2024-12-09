@@ -7,9 +7,22 @@ import pl.put.poznan.sortingmadness.logic.SortingStrategy;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Klasa implementująca algorytm sortowania przez wybór (SelectionSort).
+ * Algorytm SelectionSort polega na wyborze najmniejszego (lub największego, w zależności od kierunku) elementu w każdym kroku i umieszczeniu go na odpowiedniej pozycji.
+ */
 public class SelectionSort implements SortingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(SelectionSort.class);
 
+    /**
+     * Metoda sortująca dane przy użyciu algorytmu SelectionSort.
+     *
+     * @param data           lista map zawierających dane do posortowania
+     * @param key            klucz do użycia przy porównaniu wartości w mapach
+     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
+     * @return mapa zawierająca wyniki sortowania z danymi posortowanymi oraz czasem wykonania
+     */
     @Override
     public Map<String, Object> sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
         logger.info("Starting SelectionSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
@@ -18,6 +31,7 @@ public class SelectionSort implements SortingStrategy {
         int iterations = 0;
         long startTime = System.nanoTime();
 
+        // Selection Sort Algorithm
         for (int i = 0; i < n - 1; i++) {
             int selectedIdx = i;
 
@@ -36,6 +50,7 @@ public class SelectionSort implements SortingStrategy {
             }
             if (iterations == maxIterations && maxIterations > 0) break;
 
+            // Swap the selected element with the current element
             Map<String, String> temp = data.get(selectedIdx);
             data.set(selectedIdx, data.get(i));
             data.set(i, temp);
@@ -51,6 +66,13 @@ public class SelectionSort implements SortingStrategy {
         );
     }
 
+    /**
+     * Pomocnicza metoda do porównywania wartości, obsługuje porównania liczbowe i tekstowe.
+     *
+     * @param value1 pierwsza wartość do porównania
+     * @param value2 druga wartość do porównania
+     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli równy, 1 jeśli value1 > value2
+     */
     private int compareValues(String value1, String value2) {
         try {
             int int1 = Integer.parseInt(value1);

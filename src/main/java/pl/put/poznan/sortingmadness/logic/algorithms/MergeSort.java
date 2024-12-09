@@ -8,9 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Klasa implementująca algorytm sortowania przez scalanie (MergeSort).
+ * Algorytm polega na rekurencyjnym dzieleniu danych na mniejsze kawałki i scalaniu ich w odpowiedniej kolejności.
+ */
 public class MergeSort implements SortingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(MergeSort.class);
 
+    /**
+     * Metoda sortująca dane przy użyciu algorytmu sortowania przez scalanie.
+     *
+     * @param data           lista map zawierających dane do posortowania
+     * @param key            klucz do użycia przy porównaniu wartości w mapach
+     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
+     * @return mapa zawierająca wyniki sortowania z danymi posortowanymi oraz czasem wykonania
+     */
     @Override
     public Map<String, Object> sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
         logger.info("Starting MergeSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
@@ -28,6 +41,16 @@ public class MergeSort implements SortingStrategy {
         );
     }
 
+    /**
+     * Rekurencyjna metoda sortująca przez scalanie (merge sort).
+     *
+     * @param data           lista map zawierających dane do posortowania
+     * @param key            klucz do użycia przy porównaniu wartości w mapach
+     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
+     * @param iterations     wskaźnik liczby iteracji
+     * @return posortowana lista map
+     */
     private List<Map<String, String>> mergeSort(List<Map<String, String>> data, String key, String direction, int maxIterations, int[] iterations) {
         if (data.size() <= 1) return data;
 
@@ -38,6 +61,17 @@ public class MergeSort implements SortingStrategy {
         return merge(left, right, key, direction, maxIterations, iterations);
     }
 
+    /**
+     * Metoda scalająca dwie posortowane listy map na podstawie klucza.
+     *
+     * @param left           lewa lista map
+     * @param right          prawa lista map
+     * @param key            klucz do użycia przy porównaniu wartości w mapach
+     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
+     * @param iterations     wskaźnik liczby iteracji
+     * @return scalona lista map
+     */
     private List<Map<String, String>> merge(List<Map<String, String>> left, List<Map<String, String>> right, String key, String direction, int maxIterations, int[] iterations) {
         List<Map<String, String>> merged = new ArrayList<>();
         int i = 0, j = 0;
@@ -56,12 +90,20 @@ public class MergeSort implements SortingStrategy {
             iterations[0]++;
         }
 
+        // Append any remaining elements
         while (i < left.size()) merged.add(left.get(i++));
         while (j < right.size()) merged.add(right.get(j++));
 
         return merged;
     }
 
+    /**
+     * Pomocnicza metoda do porównywania wartości, obsługuje porównania liczbowe i tekstowe.
+     *
+     * @param value1 pierwsza wartość do porównania
+     * @param value2 druga wartość do porównania
+     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli równy, 1 jeśli value1 > value2
+     */
     private int compareValues(String value1, String value2) {
         try {
             int int1 = Integer.parseInt(value1);
