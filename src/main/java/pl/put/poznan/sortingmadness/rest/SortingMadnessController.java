@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.sortingmadness.logic.SortingMadness;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,8 @@ public class SortingMadnessController {
             String direction = param.getDirections();
 
             // Walidacja algorytmu
-            if (!"bubble".equalsIgnoreCase(algorithm) && !"insertion".equalsIgnoreCase(algorithm)) {
+            if (!List.of("bubble", "insertion", "selection", "quick", "merge", "counting")
+                    .contains(algorithm.toLowerCase())) {
                 throw new IllegalArgumentException("Unknown sorting algorithm: " + algorithm);
             }
 
@@ -63,7 +65,7 @@ public class SortingMadnessController {
 
             // Sortowanie według wybranego klucza
             for (String key : keysToSort) {
-                result = sortingMadness.sortData(data, key, algorithm, direction, maxIterations);
+                result = Collections.unmodifiableMap(sortingMadness.sortData(data, key, algorithm, direction, maxIterations));
                 data = (List<Map<String, String>>) result.get("sortedData");
             }
         }
@@ -71,3 +73,4 @@ public class SortingMadnessController {
         return result;
     }
 }
+
