@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.sortingmadness.logic.SortingMadness;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,11 +23,12 @@ public class SortingMadnessController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public List<Map<String, String>> sort(@RequestBody SortingRequest request) {
+    public Map<String, Object> sort(@RequestBody SortingRequest request) {
         logger.debug("Received request: {}", request);
 
         List<Map<String, String>> data = request.getData();
         List<String> keysToSort = request.getKeysToSort();
+        Map<String, Object> result = new HashMap<>();
 
         for (SortingRequest.SortingParameter param : request.getSortingParameters()) {
             String algorithm = param.getSortingAlgorithms();
@@ -34,14 +36,12 @@ public class SortingMadnessController {
             int maxIterations = param.getMaxIterations();
 
             for (String key : keysToSort) {
-                // Przekształć dane na listę intów lub Stringów do posortowania
-                List<Map<String, String>> sortedData = sortingMadness.sortData(data, key, algorithm, direction, maxIterations);
-
-                // Nadpisz posortowaną listę
-                data = sortedData;
+                result = sortingMadness.sortData(data, key, algorithm, direction, maxIterations);
+                data = (List<Map<String, String>>) result.get("sortedData");
             }
         }
 
-        return data;
+        return result;
     }
 }
+

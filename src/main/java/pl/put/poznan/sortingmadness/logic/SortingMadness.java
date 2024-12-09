@@ -1,27 +1,37 @@
 package pl.put.poznan.sortingmadness.logic;
 
+import pl.put.poznan.sortingmadness.logic.algorithms.BubbleSort;
 import pl.put.poznan.sortingmadness.logic.algorithms.InsertionSort;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SortingMadness {
 
     public SortingMadness() {}
 
-    public List<Map<String, String>> sortData(List<Map<String, String>> data, String key, String algorithm, String direction, int maxIterations) {
-        // Wyodrębnij dane do posortowania
-        List<Map<String, String>> sortedData = new ArrayList<>(data);
-
-        switch (algorithm.toLowerCase()) {
-            case "insertion":
-                sortedData = InsertionSort.sort(sortedData, key, direction, maxIterations);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown sorting algorithm: " + algorithm);
+    public Map<String, Object> sortData(List<Map<String, String>> data, String key, String algorithm, String direction, int maxIterations) {
+        if ("bubble".equalsIgnoreCase(algorithm)) {
+            BubbleSort.Result result = BubbleSort.sort(data, key, direction, maxIterations);
+            return createResultMap(result);
+        } else if ("insertion".equalsIgnoreCase(algorithm)) {
+            InsertionSort.Result result = InsertionSort.sort(data, key, direction, maxIterations);
+            return createResultMap(result);
+        } else {
+            throw new IllegalArgumentException("Unknown sorting algorithm: " + algorithm);
         }
+    }
 
-        return sortedData;
+    private Map<String, Object> createResultMap(BubbleSort.Result result) {
+        Map<String, Object> output = new HashMap<>();
+        output.put("sortedData", result.getSortedData());
+        output.put("executionTime", result.getExecutionTime());
+        return output;
+    }
+
+    private Map<String, Object> createResultMap(InsertionSort.Result result) {
+        Map<String, Object> output = new HashMap<>();
+        output.put("sortedData", result.getSortedData());
+        output.put("executionTime", result.getExecutionTime());
+        return output;
     }
 }

@@ -1,30 +1,34 @@
 package pl.put.poznan.sortingmadness.logic.algorithms;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class InsertionSort {
+public class BubbleSort {
 
     public static Result sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
         int n = data.size();
+        boolean swapped;
         int iterations = 0;
         long startTime = System.nanoTime(); // Start pomiaru czasu
 
-        for (int i = 1; i < n; i++) {
-            if (iterations == maxIterations && maxIterations > 0) break;
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < n - i - 1; j++) {
+                if (iterations == maxIterations && maxIterations > 0) break;
 
-            Map<String, String> current = data.get(i);
-            int j = i - 1;
-
-            while (j >= 0 && compareValues(data.get(j).get(key), current.get(key)) > 0) {
+                int comparison = compareValues(data.get(j).get(key), data.get(j + 1).get(key));
                 if ("desc".equalsIgnoreCase(direction)) {
-                    if (compareValues(data.get(j).get(key), current.get(key)) < 0) break;
+                    comparison = -comparison;
                 }
-                data.set(j + 1, data.get(j));
-                j--;
+
+                if (comparison > 0) {
+                    Collections.swap(data, j, j + 1);
+                    swapped = true;
+                }
                 iterations++;
             }
-            data.set(j + 1, current);
+            if (!swapped) break;
         }
 
         long duration = System.nanoTime() - startTime; // Koniec pomiaru czasu
