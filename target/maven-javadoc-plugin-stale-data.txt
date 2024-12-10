@@ -9,40 +9,41 @@
 -source
 '11'
 -sourcepath
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java;C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/target/generated-sources/annotations'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java;C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/target/generated-sources/annotations'
 -author
 -bottom
 'Copyright &#169; 2024. All rights reserved.'
 -charset
 'UTF-8'
 -d
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/target/site/apidocs'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
-'sorting-madness 1.0 API'
+'sorting-madness 1.1 API'
 -linkoffline
-'https://docs.oracle.com/en/java/javase/11/docs/api' 'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/target/javadoc-bundle-options'
+'https://docs.oracle.com/en/java/javase/11/docs/api' 'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
-'sorting-madness 1.0 API'
+'sorting-madness 1.1 API'
 pl.put.poznan.sortingmadness.app
 pl.put.poznan.sortingmadness.logic.algorithms
 pl.put.poznan.sortingmadness.logic
 pl.put.poznan.sortingmadness.rest
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/app/SortingMadnessApplication.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/BubbleSort.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/CountingSort.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/InsertionSort.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/MergeSort.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/QuickSort.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/SelectionSort.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/SortingMadness.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/logic/SortingStrategy.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/rest/GlobalExceptionHandler.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/rest/SortingMadnessController.java'
-'C:/Users/kolec/Desktop/pkpkpk/IOD-L11-Epsilon/src/main/java/pl/put/poznan/sortingmadness/rest/SortingRequest.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/app/SortingMadnessApplication.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/BubbleSort.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/CountingSort.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/InsertionSort.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/MergeSort.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/QuickSort.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/algorithms/SelectionSort.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/SortingMadness.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/SortingSelector.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/logic/SortingStrategy.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/rest/GlobalExceptionHandler.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/rest/SortingMadnessController.java'
+'C:/Users/kolec/Desktop/BACKUP4 - automatyczne sortowanie/IOD-L11-Epsilon-main/src/main/java/pl/put/poznan/sortingmadness/rest/SortingRequest.java'
 C:\Users\kolec\.m2\repository\org\springframework\boot\spring-boot-starter-web\2.3.3.RELEASE\spring-boot-starter-web-2.3.3.RELEASE.jar = 1733435464239
 C:\Users\kolec\.m2\repository\org\springframework\boot\spring-boot-starter\2.3.3.RELEASE\spring-boot-starter-2.3.3.RELEASE.jar = 1733435463381
 C:\Users\kolec\.m2\repository\org\springframework\boot\spring-boot\2.3.3.RELEASE\spring-boot-2.3.3.RELEASE.jar = 1733435464222
@@ -75,19 +76,19 @@ C:\Users\kolec\.m2\repository\org\springframework\spring-expression\5.2.8.RELEAS
 C:\Users\kolec\.m2\repository\org\springframework\spring-core\5.2.8.RELEASE\spring-core-5.2.8.RELEASE.jar = 1733435462771
 C:\Users\kolec\.m2\repository\org\springframework\spring-jcl\5.2.8.RELEASE\spring-jcl-5.2.8.RELEASE.jar = 1733435463603
 C:\Users\kolec\.m2\repository\org\slf4j\slf4j-api\1.7.30\slf4j-api-1.7.30.jar = 1733435462354
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\src\main\java = 1733768851371
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\generated-sources\annotations = 1733768888239
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\allclasses-index.html = 1733769627601
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\allpackages-index.html = 1733769627610
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\element-list = 1733769627396
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\help-doc.html = 1733769627660
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\index-all.html = 1733769627640
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\index.html = 1733769627579
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\member-search-index.js = 1733769627619
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\module-search-index.js = 1733769627610
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\overview-summary.html = 1733769627648
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\overview-tree.html = 1733769627570
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\package-search-index.js = 1733769627614
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\search.html = 1733769627644
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\tag-search-index.js = 1733769627620
-C:\Users\kolec\Desktop\pkpkpk\IOD-L11-Epsilon\target\site\apidocs\type-search-index.js = 1733769627614
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\src\main\java = 1733860732110
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\generated-sources\annotations = 1733837780000
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\allclasses-index.html = 1733869415245
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\allpackages-index.html = 1733869415248
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\element-list = 1733869415067
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\help-doc.html = 1733869415288
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\index-all.html = 1733869415272
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\index.html = 1733869415225
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\member-search-index.js = 1733869415254
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\module-search-index.js = 1733869415250
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\overview-summary.html = 1733869415277
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\overview-tree.html = 1733869415219
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\package-search-index.js = 1733869415251
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\search.html = 1733869415274
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\tag-search-index.js = 1733869415255
+C:\Users\kolec\Desktop\BACKUP4 - automatyczne sortowanie\IOD-L11-Epsilon-main\target\site\apidocs\type-search-index.js = 1733869415253

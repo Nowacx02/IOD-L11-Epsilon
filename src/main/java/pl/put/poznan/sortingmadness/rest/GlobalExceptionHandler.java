@@ -11,21 +11,23 @@ import java.util.Map;
 
 /**
  * Klasa {@code GlobalExceptionHandler} zapewnia globalną obsługę wyjątków w aplikacji Spring.
- * Umożliwia przechwycenie i odpowiednie przetwarzanie wyjątków, takich jak {@code IllegalArgumentException},
- * oraz zwrócenie stosownego komunikatu błędu w odpowiedzi HTTP.
+ * <p>
+ * Przeznaczona do obsługi wyjątków w aplikacji, takich jak {@code IllegalArgumentException},
+ * w celu ustandaryzowanego zwracania komunikatów błędów w odpowiedzi HTTP.
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
      * Obsługuje wyjątek {@code IllegalArgumentException}, który może wystąpić w czasie działania aplikacji.
+     * <p>
      * Tworzy standardowy format odpowiedzi błędu zawierający informacje o typie błędu oraz jego szczegółach.
      *
-     * @param ex wyjątek {@code IllegalArgumentException}, który został przechwycony
+     * @param ex wyjątek {@code IllegalArgumentException}, który został przechwycony.
      * @return mapa zawierająca szczegóły błędu w formacie JSON, z polami:
      *         <ul>
-     *         <li>{@code error}: opis ogólny błędu, np. "Invalid Request"</li>
-     *         <li>{@code message}: szczegółowa wiadomość wyciągnięta z wyjątku</li>
+     *             <li>{@code error}: opis ogólny błędu, np. "Invalid Request".</li>
+     *             <li>{@code message}: szczegółowa wiadomość wyciągnięta z wyjątku.</li>
      *         </ul>
      */
     @ExceptionHandler(IllegalArgumentException.class)

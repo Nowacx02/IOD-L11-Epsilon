@@ -5,31 +5,88 @@ import org.slf4j.LoggerFactory;
 import pl.put.poznan.sortingmadness.logic.SortingStrategy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Klasa implementująca algorytm sortowania przez scalanie (MergeSort).
- * Algorytm polega na rekurencyjnym dzieleniu danych na mniejsze kawałki i scalaniu ich w odpowiedniej kolejności.
+ * Algorytm dzieli dane na mniejsze podzbiory, sortuje je rekurencyjnie,
+ * a następnie scala w posortowaną całość.
  */
 public class MergeSort implements SortingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(MergeSort.class);
 
     /**
-     * Metoda sortująca dane przy użyciu algorytmu sortowania przez scalanie.
+     * Sortuje listę map według podanego klucza i kierunku za pomocą algorytmu sortowania przez scalanie.
      *
-     * @param data           lista map zawierających dane do posortowania
-     * @param key            klucz do użycia przy porównaniu wartości w mapach
-     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
-     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
-     * @return mapa zawierająca wyniki sortowania z danymi posortowanymi oraz czasem wykonania
+     * @param data          lista map zawierających dane do posortowania
+     * @param key           klucz używany do porównywania wartości w mapach
+     * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations maksymalna liczba iteracji do wykonania; 0 oznacza brak limitu
+     * @param <E>           typ wartości w mapach, który musi być porównywalny
+     * @return mapa z wynikami, zawierająca posortowaną listę danych oraz czas wykonania w milisekundach
      */
     @Override
-    public Map<String, Object> sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
+    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, String key, String direction, int maxIterations) {
         logger.info("Starting MergeSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
 
+        long startTime = System.nanoTime(); // Start time measurement
+
+        // Step 1: Count occurrences of each value
+        Map<E, Integer> countMap = new HashMap<>();
+        for (Map<String, E> entry : data) {
+            E value = entry.get(key);
+            countMap.put(value, countMap.getOrDefault(value, 0) + 1);
+        }
+
+        // Step 2: Sort the keys based on the direction
+        List<E> sortedKeys = new ArrayList<>(countMap.keySet());
+        sortedKeys.sort((a, b) -> {
+            int comparison = a.compareTo(b);
+            return "desc".equalsIgnoreCase(direction) ? -comparison : comparison;
+        });
+
+        // Step 3: Reconstruct the sorted list based on the counts
+        List<Map<String, E>> sortedData = new ArrayList<>();
+        for (E sortedKey : sortedKeys) {
+            int count = countMap.get(sortedKey);
+            while (count > 0) {
+                for (Map<String, E> entry : data) {
+                    if (entry.get(key).equals(sortedKey)) {
+                        sortedData.add(entry);
+                        count--;
+                        break; // Avoid adding the same entry multiple times
+                    }
+                }
+            }
+        }
+
+        long duration = System.nanoTime() - startTime; // End time measurement
+        logger.info("MergeSort completed in {} ms.", duration / 1_000_000.0);
+
+        // Return result as a Map
+        return Map.of(
+                "sortedData", sortedData,
+                "executionTime", duration / 1_000_000.0
+        );
+    }
+
+    /**
+     * Sortuje listę elementów za pomocą algorytmu sortowania przez scalanie.
+     *
+     * @param data          lista danych do posortowania
+     * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations maksymalna liczba iteracji do wykonania; 0 oznacza brak limitu
+     * @param <E>           typ elementów na liście, który musi być porównywalny
+     * @return mapa z wynikami, zawierająca posortowaną listę danych oraz czas wykonania w milisekundach
+     */
+    @Override
+    public <E extends Comparable<E>> Map<String, Object> sortList(List<E> data, String direction, int maxIterations) {
+        logger.info("Starting MergeSort with direction: {}, maxIterations: {}", direction, maxIterations);
+
         long startTime = System.nanoTime();
-        List<Map<String, String>> sortedData = mergeSort(data, key, direction, maxIterations, new int[]{0});
+        List<Comparable> sortedData = mergeSort(new ArrayList<>(data), direction, maxIterations, new int[]{0});
         long duration = System.nanoTime() - startTime;
 
         logger.info("MergeSort completed in {} ms.", duration / 1_000_000.0);
@@ -42,42 +99,40 @@ public class MergeSort implements SortingStrategy {
     }
 
     /**
-     * Rekurencyjna metoda sortująca przez scalanie (merge sort).
+     * Rekurencyjna metoda implementująca algorytm sortowania przez scalanie.
      *
-     * @param data           lista map zawierających dane do posortowania
-     * @param key            klucz do użycia przy porównaniu wartości w mapach
-     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
-     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
-     * @param iterations     wskaźnik liczby iteracji
-     * @return posortowana lista map
+     * @param data          lista danych do posortowania
+     * @param direction     kierunek sortowania: "asc" lub "desc"
+     * @param maxIterations maksymalna liczba iteracji; 0 oznacza brak limitu
+     * @param iterations    licznik wykonanych iteracji (przekazywany przez referencję)
+     * @return posortowana lista danych
      */
-    private List<Map<String, String>> mergeSort(List<Map<String, String>> data, String key, String direction, int maxIterations, int[] iterations) {
+    private <E extends Comparable<E>> List<Comparable> mergeSort(List<Comparable> data, String direction, int maxIterations, int[] iterations) {
         if (data.size() <= 1) return data;
 
         int mid = data.size() / 2;
-        List<Map<String, String>> left = mergeSort(data.subList(0, mid), key, direction, maxIterations, iterations);
-        List<Map<String, String>> right = mergeSort(data.subList(mid, data.size()), key, direction, maxIterations, iterations);
+        List<Comparable> left = mergeSort(data.subList(0, mid), direction, maxIterations, iterations);
+        List<Comparable> right = mergeSort(data.subList(mid, data.size()), direction, maxIterations, iterations);
 
-        return merge(left, right, key, direction, maxIterations, iterations);
+        return merge(left, right, direction, maxIterations, iterations);
     }
 
     /**
-     * Metoda scalająca dwie posortowane listy map na podstawie klucza.
+     * Scala dwie posortowane listy w jedną posortowaną listę.
      *
-     * @param left           lewa lista map
-     * @param right          prawa lista map
-     * @param key            klucz do użycia przy porównaniu wartości w mapach
-     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
-     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
-     * @param iterations     wskaźnik liczby iteracji
-     * @return scalona lista map
+     * @param left          pierwsza posortowana lista
+     * @param right         druga posortowana lista
+     * @param direction     kierunek sortowania: "asc" lub "desc"
+     * @param maxIterations maksymalna liczba iteracji; 0 oznacza brak limitu
+     * @param iterations    licznik wykonanych iteracji (przekazywany przez referencję)
+     * @return scalona i posortowana lista
      */
-    private List<Map<String, String>> merge(List<Map<String, String>> left, List<Map<String, String>> right, String key, String direction, int maxIterations, int[] iterations) {
-        List<Map<String, String>> merged = new ArrayList<>();
+    private List<Comparable> merge(List<Comparable> left, List<Comparable> right, String direction, int maxIterations, int[] iterations) {
+        List<Comparable> merged = new ArrayList<>();
         int i = 0, j = 0;
 
         while (i < left.size() && j < right.size() && (iterations[0] < maxIterations || maxIterations == 0)) {
-            int comparison = compareValues(left.get(i).get(key), right.get(j).get(key));
+            int comparison = left.get(i).compareTo(right.get(j));
             if ("desc".equalsIgnoreCase(direction)) {
                 comparison = -comparison;
             }
@@ -95,22 +150,5 @@ public class MergeSort implements SortingStrategy {
         while (j < right.size()) merged.add(right.get(j++));
 
         return merged;
-    }
-
-    /**
-     * Pomocnicza metoda do porównywania wartości, obsługuje porównania liczbowe i tekstowe.
-     *
-     * @param value1 pierwsza wartość do porównania
-     * @param value2 druga wartość do porównania
-     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli równy, 1 jeśli value1 > value2
-     */
-    private int compareValues(String value1, String value2) {
-        try {
-            int int1 = Integer.parseInt(value1);
-            int int2 = Integer.parseInt(value2);
-            return Integer.compare(int1, int2);
-        } catch (NumberFormatException e) {
-            return value1.compareTo(value2);
-        }
     }
 }

@@ -20,33 +20,62 @@ public class SortingMadness {
     public SortingMadness() {}
 
     /**
-     * Metoda do sortowania danych przy użyciu wybranego algorytmu.
+     * Sortuje dane na podstawie wybranego algorytmu sortowania.
      *
      * @param data           lista map zawierających dane do posortowania
-     * @param key            klucz do użycia przy sortowaniu wartości w mapach
+     * @param key            klucz używany do sortowania wartości w mapach
      * @param algorithm      nazwa algorytmu sortującego (np. "bubble", "insertion", "selection", "quick", "merge", "counting")
-     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
-     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
-     * @return mapa zawierająca wyniki sortowania z danymi posortowanymi oraz czasem wykonania
+     * @param direction      kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations  maksymalna liczba iteracji sortowania; wartość 0 oznacza brak ograniczenia
+     * @return mapa zawierająca wyniki sortowania: posortowane dane oraz czas wykonania w milisekundach
+     * @throws IllegalArgumentException jeśli dane są puste lub algorytm nie jest rozpoznany
      */
-    public Map<String, Object> sortData(List<Map<String, String>> data, String key, String algorithm, String direction, int maxIterations) {
+    public Map<String, Object> sortData(List<Map<String, Comparable>> data, String key, String algorithm, String direction, int maxIterations) {
         logger.info("Starting sortData with algorithm: {}, key: {}, direction: {}, maxIterations: {}",
                 algorithm, key, direction, maxIterations);
+
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("Dataset is empty or null.");
         }
-        if(maxIterations <= 0)
+        if (maxIterations <= 0) {
             maxIterations = 0;
+        }
+
         SortingStrategy strategy = getStrategy(algorithm);
         return strategy.sort(data, key, direction, maxIterations);
     }
 
     /**
-     * Metoda pomocnicza do wyboru odpowiedniego algorytmu sortującego na podstawie nazwy.
+     * Sortuje listę elementów na podstawie wybranego algorytmu sortowania.
      *
-     * @param algorithm nazwa algorytmu (np. "bubble", "insertion", "selection", "quick", "merge", "counting")
-     * @return instancja odpowiedniego algorytmu sortującego
-     * @throws IllegalArgumentException jeśli algorytm nie jest rozpoznany
+     * @param data          lista elementów do posortowania
+     * @param algorithm     nazwa algorytmu sortującego (np. "bubble", "insertion", "selection", "quick", "merge", "counting")
+     * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations maksymalna liczba iteracji sortowania; wartość 0 oznacza brak ograniczenia
+     * @return mapa zawierająca wyniki sortowania: posortowane dane oraz czas wykonania w milisekundach
+     * @throws IllegalArgumentException jeśli dane są puste lub algorytm nie jest rozpoznany
+     */
+    public Map<String, Object> sortDataList(List<Comparable> data, String algorithm, String direction, int maxIterations) {
+        logger.info("Starting sortDataList with algorithm: {}, direction: {}, maxIterations: {}",
+                algorithm, direction, maxIterations);
+
+        if (data == null || data.isEmpty()) {
+            throw new IllegalArgumentException("Dataset is empty or null.");
+        }
+        if (maxIterations < 0) {
+            maxIterations = 0;
+        }
+
+        SortingStrategy strategy = getStrategy(algorithm);
+        return strategy.sortList(data, direction, maxIterations);
+    }
+
+    /**
+     * Wybiera odpowiednią strategię sortowania na podstawie nazwy algorytmu.
+     *
+     * @param algorithm nazwa algorytmu sortowania (np. "bubble", "insertion", "selection", "quick", "merge", "counting")
+     * @return instancja klasy implementującej wybrany algorytm sortowania
+     * @throws IllegalArgumentException jeśli podana nazwa algorytmu jest nierozpoznana
      */
     private SortingStrategy getStrategy(String algorithm) {
         switch (algorithm.toLowerCase()) {

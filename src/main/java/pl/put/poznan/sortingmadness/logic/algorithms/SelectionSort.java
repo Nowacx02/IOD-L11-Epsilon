@@ -9,29 +9,33 @@ import java.util.Map;
 
 /**
  * Klasa implementująca algorytm sortowania przez wybór (SelectionSort).
- * Algorytm SelectionSort polega na wyborze najmniejszego (lub największego, w zależności od kierunku) elementu w każdym kroku i umieszczeniu go na odpowiedniej pozycji.
+ * Algorytm SelectionSort polega na wyborze najmniejszego (lub największego, w zależności od kierunku) elementu w każdym kroku
+ * i umieszczeniu go na odpowiedniej pozycji.
+ * Jest to algorytm o złożoności czasowej O(n^2).
  */
 public class SelectionSort implements SortingStrategy {
     private static final Logger logger = LoggerFactory.getLogger(SelectionSort.class);
 
     /**
-     * Metoda sortująca dane przy użyciu algorytmu SelectionSort.
+     * Sortuje dane przy użyciu algorytmu SelectionSort.
      *
-     * @param data           lista map zawierających dane do posortowania
-     * @param key            klucz do użycia przy porównaniu wartości w mapach
-     * @param direction      kierunek sortowania, "asc" (rosnąco) lub "desc" (malejąco)
-     * @param maxIterations  maksymalna liczba iteracji sortowania do wykonania
-     * @return mapa zawierająca wyniki sortowania z danymi posortowanymi oraz czasem wykonania
+     * @param data          lista map zawierających dane do posortowania
+     * @param key           klucz używany do porównania wartości w mapach
+     * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations maksymalna liczba iteracji sortowania; wartość 0 oznacza brak ograniczenia
+     * @param <E>           typ elementów implementujących interfejs {@link Comparable}
+     * @return mapa zawierająca posortowane dane oraz czas wykonania sortowania w milisekundach
+     * @throws IllegalArgumentException jeśli typ wartości w mapach nie jest obsługiwany
      */
     @Override
-    public Map<String, Object> sort(List<Map<String, String>> data, String key, String direction, int maxIterations) {
+    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, String key, String direction, int maxIterations) {
         logger.info("Starting SelectionSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
 
         int n = data.size();
         int iterations = 0;
         long startTime = System.nanoTime();
 
-        // Selection Sort Algorithm
+        // Implementacja algorytmu Selection Sort
         for (int i = 0; i < n - 1; i++) {
             int selectedIdx = i;
 
@@ -50,8 +54,8 @@ public class SelectionSort implements SortingStrategy {
             }
             if (iterations == maxIterations && maxIterations > 0) break;
 
-            // Swap the selected element with the current element
-            Map<String, String> temp = data.get(selectedIdx);
+            // Zamiana miejscami elementów
+            Map<String, E> temp = data.get(selectedIdx);
             data.set(selectedIdx, data.get(i));
             data.set(i, temp);
         }
@@ -59,7 +63,6 @@ public class SelectionSort implements SortingStrategy {
         long duration = System.nanoTime() - startTime;
         logger.info("SelectionSort completed in {} ms.", duration / 1_000_000.0);
 
-        // Return result as a Map
         return Map.of(
                 "sortedData", data,
                 "executionTime", duration / 1_000_000.0
@@ -67,19 +70,74 @@ public class SelectionSort implements SortingStrategy {
     }
 
     /**
-     * Pomocnicza metoda do porównywania wartości, obsługuje porównania liczbowe i tekstowe.
+     * Porównuje dwie wartości implementujące interfejs {@link Comparable}.
      *
      * @param value1 pierwsza wartość do porównania
      * @param value2 druga wartość do porównania
-     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli równy, 1 jeśli value1 > value2
+     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli są równe, 1 jeśli value1 > value2
+     * @throws IllegalArgumentException jeśli typ wartości nie jest obsługiwany
      */
-    private int compareValues(String value1, String value2) {
-        try {
-            int int1 = Integer.parseInt(value1);
-            int int2 = Integer.parseInt(value2);
-            return Integer.compare(int1, int2);
-        } catch (NumberFormatException e) {
-            return value1.compareTo(value2);
+    private static int compareValues(Comparable value1, Comparable value2) {
+        if (value1 instanceof Integer && value2 instanceof Integer) {
+            return Integer.compare((Integer) value1, (Integer) value2);
+        } else if (value1 instanceof Double && value2 instanceof Double) {
+            return Double.compare((Double) value1, (Double) value2);
+        } else if (value1 instanceof String && value2 instanceof String) {
+            return ((String) value1).compareTo((String) value2);
+        } else {
+            throw new IllegalArgumentException("Unsupported comparison types: " + value1.getClass() + ", " + value2.getClass());
         }
+    }
+
+    /**
+     * Sortuje listę elementów przy użyciu algorytmu SelectionSort.
+     *
+     * @param data          lista elementów do posortowania
+     * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
+     * @param maxIterations maksymalna liczba iteracji sortowania; wartość 0 oznacza brak ograniczenia
+     * @param <E>           typ elementów implementujących interfejs {@link Comparable}
+     * @return mapa zawierająca posortowane dane oraz czas wykonania sortowania w milisekundach
+     */
+    @Override
+    public <E extends Comparable<E>> Map<String, Object> sortList(List<E> data, String direction, int maxIterations) {
+        logger.info("Starting SelectionSort with direction: {}, maxIterations: {}", direction, maxIterations);
+
+        int n = data.size();
+        int iterations = 0;
+        long startTime = System.nanoTime();
+
+        // Implementacja algorytmu Selection Sort dla listy elementów
+        for (int i = 0; i < n - 1; i++) {
+            int selectedIdx = i;
+
+            for (int j = i + 1; j < n; j++) {
+                if (iterations == maxIterations && maxIterations > 0) break;
+
+                int comparison = data.get(j).compareTo(data.get(selectedIdx));
+                if ("desc".equalsIgnoreCase(direction)) {
+                    comparison = -comparison;
+                }
+
+                if (comparison < 0) {
+                    selectedIdx = j;
+                }
+                iterations++;
+            }
+
+            if (iterations == maxIterations && maxIterations > 0) break;
+
+            // Zamiana miejscami elementów
+            E temp = data.get(selectedIdx);
+            data.set(selectedIdx, data.get(i));
+            data.set(i, temp);
+        }
+
+        long duration = System.nanoTime() - startTime;
+        logger.info("SelectionSort completed in {} ms.", duration / 1_000_000.0);
+
+        return Map.of(
+                "sortedData", data,
+                "executionTime", duration / 1_000_000.0
+        );
     }
 }
