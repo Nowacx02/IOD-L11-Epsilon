@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 public class SortingRequest {
 
-    @JsonProperty("keysToSort")
+    @JsonProperty("keyToSort")
     private List<String> keysToSort;
 
     @JsonProperty("sortingParameters")
