@@ -50,6 +50,7 @@ public class SortingMadnessController {
         if (validateData(data)) {
 
             List<String> keysToSort = request.getKeysToSort();
+            Collections.reverse(keysToSort);
             validateKeysToSort(keysToSort, data);
 
             Integer globalMaxIterations = request.getGlobalMaxIterations();
