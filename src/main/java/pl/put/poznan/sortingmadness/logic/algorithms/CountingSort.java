@@ -49,19 +49,22 @@ public class CountingSort implements SortingStrategy {
         });
 
         // Rekonstrukcja posortowanej listy na podstawie zliczeń
+        // Poprawiony fragment
         List<Map<String, E>> sortedData = new ArrayList<>();
+        List<Map<String, E>> remainingEntries = new ArrayList<>(data); // Kopia oryginalnej listy
+
         for (E sortedKey : sortedKeys) {
             int count = countMap.get(sortedKey);
-            while (count > 0) {
-                for (Map<String, E> entry : data) {
-                    if (entry.get(key).equals(sortedKey)) {
-                        sortedData.add(entry);
-                        count--;
-                        break;
-                    }
+            for (int i = 0; i < remainingEntries.size() && count > 0; i++) {
+                Map<String, E> entry = remainingEntries.get(i);
+                if (entry.get(key).equals(sortedKey)) {
+                    sortedData.add(entry);
+                    remainingEntries.remove(i--); // Usuwamy element, który został już dodany
+                    count--;
                 }
             }
         }
+
 
         long duration = System.nanoTime() - startTime;
         logger.info("CountingSort completed in {} ms.", duration / 1_000_000.0);
