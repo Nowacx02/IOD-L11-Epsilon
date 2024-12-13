@@ -23,16 +23,16 @@ public class SortingMadness {
      * Sortuje dane na podstawie wybranego algorytmu sortowania.
      *
      * @param data           lista map zawierających dane do posortowania
-     * @param key            klucz używany do sortowania wartości w mapach
+     * @param keys            klucz używany do sortowania wartości w mapach
      * @param algorithm      nazwa algorytmu sortującego (np. "bubble", "insertion", "selection", "quick", "merge", "counting")
      * @param direction      kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
      * @param maxIterations  maksymalna liczba iteracji sortowania; wartość 0 oznacza brak ograniczenia
      * @return mapa zawierająca wyniki sortowania: posortowane dane oraz czas wykonania w milisekundach
      * @throws IllegalArgumentException jeśli dane są puste lub algorytm nie jest rozpoznany
      */
-    public Map<String, Object> sortData(List<Map<String, Comparable>> data, String key, String algorithm, String direction, int maxIterations) {
+    public Map<String, Object> sortData(List<Map<String, Comparable>> data, List<String> keys, String algorithm, String direction, int maxIterations) {
         logger.info("Starting sortData with algorithm: {}, key: {}, direction: {}, maxIterations: {}",
-                algorithm, key, direction, maxIterations);
+                algorithm, keys, direction, maxIterations);
 
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("Dataset is empty or null.");
@@ -42,7 +42,7 @@ public class SortingMadness {
         }
 
         SortingStrategy strategy = getStrategy(algorithm);
-        return strategy.sort(data, key, direction, maxIterations);
+        return strategy.sort(data, keys, direction, maxIterations);
     }
 
     /**

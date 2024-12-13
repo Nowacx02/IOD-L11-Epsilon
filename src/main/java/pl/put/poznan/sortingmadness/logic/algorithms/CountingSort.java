@@ -29,42 +29,50 @@ public class CountingSort implements SortingStrategy {
      * @param <E> typ wartości w mapach, który implementuje {@link Comparable}
      */
     @Override
-    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, String key, String direction, int maxIterations) {
-        logger.info("Starting CountingSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
+    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, List<String> keys, String direction, int maxIterations) {
+        logger.info("Starting CountingSort with keys: {}, direction: {}, maxIterations: {}", keys, direction, maxIterations);
 
         long startTime = System.nanoTime();
 
-        // Zliczanie wystąpień wartości
-        Map<E, Integer> countMap = new HashMap<>();
-        for (Map<String, E> entry : data) {
-            E value = entry.get(key);
-            countMap.put(value, countMap.getOrDefault(value, 0) + 1);
+        // Zliczanie wystąpień dla każdego klucza z priorytetem kluczy
+        List<Map<E, Integer>> countMaps = new ArrayList<>();
+        for (String key : keys) {
+            Map<E, Integer> countMap = new HashMap<>();
+            for (Map<String, E> entry : data) {
+                E value = entry.get(key);
+                countMap.put(value, countMap.getOrDefault(value, 0) + 1);
+            }
+            countMaps.add(countMap);
         }
 
-        // Sortowanie kluczy na podstawie kierunku
-        List<E> sortedKeys = new ArrayList<>(countMap.keySet());
-        sortedKeys.sort((a, b) -> {
-            int comparison = a.compareTo(b);
-            return "desc".equalsIgnoreCase(direction) ? -comparison : comparison;
-        });
+        // Sortowanie kluczy na podstawie kierunku dla każdego poziomu klucza
+        List<List<E>> sortedKeysList = new ArrayList<>();
+        for (int i = 0; i < keys.size(); i++) {
+            Map<E, Integer> countMap = countMaps.get(i);
+            List<E> sortedKeys = new ArrayList<>(countMap.keySet());
+            sortedKeys.sort((a, b) -> {
+                int comparison = a.compareTo(b);
+                return "desc".equalsIgnoreCase(direction) ? -comparison : comparison;
+            });
+            sortedKeysList.add(sortedKeys);
+        }
 
-        // Rekonstrukcja posortowanej listy na podstawie zliczeń
-        // Poprawiony fragment
-        List<Map<String, E>> sortedData = new ArrayList<>();
-        List<Map<String, E>> remainingEntries = new ArrayList<>(data); // Kopia oryginalnej listy
+        // Rekonstrukcja posortowanej listy na podstawie priorytetu kluczy
+        List<Map<String, E>> sortedData = new ArrayList<>(data);
+        for (int level = keys.size() - 1; level >= 0; level--) {
+            String currentKey = keys.get(level);
+            List<E> sortedKeys = sortedKeysList.get(level);
 
-        for (E sortedKey : sortedKeys) {
-            int count = countMap.get(sortedKey);
-            for (int i = 0; i < remainingEntries.size() && count > 0; i++) {
-                Map<String, E> entry = remainingEntries.get(i);
-                if (entry.get(key).equals(sortedKey)) {
-                    sortedData.add(entry);
-                    remainingEntries.remove(i--); // Usuwamy element, który został już dodany
-                    count--;
+            List<Map<String, E>> tempData = new ArrayList<>();
+            for (E sortedKey : sortedKeys) {
+                for (Map<String, E> entry : sortedData) {
+                    if (entry.get(currentKey).equals(sortedKey)) {
+                        tempData.add(entry);
+                    }
                 }
             }
+            sortedData = tempData;
         }
-
 
         long duration = System.nanoTime() - startTime;
         logger.info("CountingSort completed in {} ms.", duration / 1_000_000.0);
@@ -74,6 +82,7 @@ public class CountingSort implements SortingStrategy {
                 "executionTime", duration / 1_000_000.0
         );
     }
+
 
     /**
      * Sortuje listę elementów przy użyciu algorytmu sortowania przez liczenie.

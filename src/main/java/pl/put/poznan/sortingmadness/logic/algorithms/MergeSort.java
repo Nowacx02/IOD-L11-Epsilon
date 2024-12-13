@@ -21,49 +21,20 @@ public class MergeSort implements SortingStrategy {
      * Sortuje listę map według podanego klucza i kierunku za pomocą algorytmu sortowania przez scalanie.
      *
      * @param data          lista map zawierających dane do posortowania
-     * @param key           klucz używany do porównywania wartości w mapach
+     * @param keys           klucz używany do porównywania wartości w mapach
      * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
      * @param maxIterations maksymalna liczba iteracji do wykonania; 0 oznacza brak limitu
      * @param <E>           typ wartości w mapach, który musi być porównywalny
      * @return mapa z wynikami, zawierająca posortowaną listę danych oraz czas wykonania w milisekundach
      */
     @Override
-    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, String key, String direction, int maxIterations) {
-        logger.info("Starting MergeSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
+    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, List<String> keys, String direction, int maxIterations) {
+        logger.info("Starting MergeSort with keys: {}, direction: {}, maxIterations: {}", keys, direction, maxIterations);
 
         long startTime = System.nanoTime(); // Start time measurement
 
-        // Step 1: Count occurrences of each value
-        Map<E, Integer> countMap = new HashMap<>();
-        for (Map<String, E> entry : data) {
-            E value = entry.get(key);
-            countMap.put(value, countMap.getOrDefault(value, 0) + 1);
-        }
-
-        // Step 2: Sort the keys based on the direction
-        List<E> sortedKeys = new ArrayList<>(countMap.keySet());
-        sortedKeys.sort((a, b) -> {
-            int comparison = a.compareTo(b);
-            return "desc".equalsIgnoreCase(direction) ? -comparison : comparison;
-        });
-
-        // Step 3: Reconstruct the sorted list based on the counts
-        // Poprawiony fragment
-        List<Map<String, E>> sortedData = new ArrayList<>();
-        List<Map<String, E>> remainingEntries = new ArrayList<>(data); // Kopia oryginalnej listy
-
-        for (E sortedKey : sortedKeys) {
-            int count = countMap.get(sortedKey);
-            for (int i = 0; i < remainingEntries.size() && count > 0; i++) {
-                Map<String, E> entry = remainingEntries.get(i);
-                if (entry.get(key).equals(sortedKey)) {
-                    sortedData.add(entry);
-                    remainingEntries.remove(i--); // Usuwamy element, który został już dodany
-                    count--;
-                }
-            }
-        }
-
+        // Rekurencyjne sortowanie listy za pomocą MergeSort
+        List<Map<String, E>> sortedData = mergeSort(data, keys, direction, maxIterations);
 
         long duration = System.nanoTime() - startTime; // End time measurement
         logger.info("MergeSort completed in {} ms.", duration / 1_000_000.0);
@@ -74,6 +45,101 @@ public class MergeSort implements SortingStrategy {
                 "executionTime", duration / 1_000_000.0
         );
     }
+
+    /**
+     * Rekurencyjna metoda MergeSort.
+     *
+     * @param data Lista map do posortowania
+     * @param keys Klucze określające priorytet sortowania
+     * @param direction Kierunek sortowania (asc lub desc)
+     * @param maxIterations Maksymalna liczba iteracji (0 oznacza brak limitu)
+     * @return Posortowana lista map
+     */
+    private <E extends Comparable<E>> List<Map<String, E>> mergeSort(List<Map<String, E>> data, List<String> keys, String direction, int maxIterations) {
+        if (data.size() <= 1) {
+            return data;
+        }
+
+        int mid = data.size() / 2;
+        List<Map<String, E>> left = mergeSort(new ArrayList<>(data.subList(0, mid)), keys, direction, maxIterations);
+        List<Map<String, E>> right = mergeSort(new ArrayList<>(data.subList(mid, data.size())), keys, direction, maxIterations);
+
+        return merge(left, right, keys, direction);
+    }
+
+    /**
+     * Łączy dwie posortowane listy w jedną posortowaną listę.
+     *
+     * @param left Lewa posortowana lista
+     * @param right Prawa posortowana lista
+     * @param keys Klucze określające priorytet sortowania
+     * @param direction Kierunek sortowania (asc lub desc)
+     * @return Posortowana lista
+     */
+    private <E extends Comparable<E>> List<Map<String, E>> merge(List<Map<String, E>> left, List<Map<String, E>> right, List<String> keys, String direction) {
+        List<Map<String, E>> merged = new ArrayList<>();
+        int i = 0, j = 0;
+
+        while (i < left.size() && j < right.size()) {
+            int comparison = compareByKeys(left.get(i), right.get(j), keys);
+            if ("desc".equalsIgnoreCase(direction)) {
+                comparison = -comparison;
+            }
+
+            if (comparison <= 0) {
+                merged.add(left.get(i++));
+            } else {
+                merged.add(right.get(j++));
+            }
+        }
+
+        while (i < left.size()) {
+            merged.add(left.get(i++));
+        }
+
+        while (j < right.size()) {
+            merged.add(right.get(j++));
+        }
+
+        return merged;
+    }
+
+    /**
+     * Compares two maps based on a list of keys with a priority order.
+     *
+     * @param map1 the first map to compare
+     * @param map2 the second map to compare
+     * @param keys the list of keys defining the priority order for comparison
+     * @return the comparison result: -1, 0, or 1
+     */
+    private <E extends Comparable<E>> int compareByKeys(Map<String, E> map1, Map<String, E> map2, List<String> keys) {
+        for (String key : keys) {
+            E value1 = map1.get(key);
+            E value2 = map2.get(key);
+
+            if (value1 == null || value2 == null) {
+                throw new IllegalArgumentException("Key not found in one of the maps: " + key);
+            }
+
+            int comparison = compareValues(value1, value2);
+            if (comparison != 0) {
+                return comparison;
+            }
+        }
+        return 0; // All keys are equal
+    }
+
+    /**
+     * Pomocnicza metoda do porównywania wartości, obsługuje porównania liczbowe i tekstowe.
+     *
+     * @param value1 pierwsza wartość do porównania
+     * @param value2 druga wartość do porównania
+     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli równy, 1 jeśli value1 > value2
+     */
+    private static <E extends Comparable<E>> int compareValues(E value1, E value2) {
+        return value1.compareTo(value2);
+    }
+
 
     /**
      * Sortuje listę elementów za pomocą algorytmu sortowania przez scalanie.

@@ -20,7 +20,7 @@ public class SelectionSort implements SortingStrategy {
      * Sortuje dane przy użyciu algorytmu SelectionSort.
      *
      * @param data          lista map zawierających dane do posortowania
-     * @param key           klucz używany do porównania wartości w mapach
+     * @param keys           klucz używany do porównania wartości w mapach
      * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
      * @param maxIterations maksymalna liczba iteracji sortowania; wartość 0 oznacza brak ograniczenia
      * @param <E>           typ elementów implementujących interfejs {@link Comparable}
@@ -28,40 +28,40 @@ public class SelectionSort implements SortingStrategy {
      * @throws IllegalArgumentException jeśli typ wartości w mapach nie jest obsługiwany
      */
     @Override
-    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, String key, String direction, int maxIterations) {
-        logger.info("Starting SelectionSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
+    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, List<String> keys, String direction, int maxIterations) {
+        logger.info("Starting InsertionSort with keys: {}, direction: {}, maxIterations: {}", keys, direction, maxIterations);
 
         int n = data.size();
         int iterations = 0;
         long startTime = System.nanoTime();
 
-        // Implementacja algorytmu Selection Sort
-        for (int i = 0; i < n - 1; i++) {
-            int selectedIdx = i;
+        // Algorytm sortowania przez wstawianie dla wielu kluczy
+        for (int i = 1; i < n; i++) {
+            if (iterations == maxIterations && maxIterations > 0) break;
 
-            for (int j = i + 1; j < n; j++) {
+            Map<String, E> current = data.get(i);
+            int j = i - 1;
+
+            while (j >= 0) {
                 if (iterations == maxIterations && maxIterations > 0) break;
 
-                int comparison = compareValues(data.get(j).get(key), data.get(selectedIdx).get(key));
+                int comparison = compareByKeys(data.get(j), current, keys);
                 if ("desc".equalsIgnoreCase(direction)) {
                     comparison = -comparison;
                 }
 
-                if (comparison < 0) {
-                    selectedIdx = j;
-                }
+                if (comparison <= 0) break;
+
+                data.set(j + 1, data.get(j));
+                j--;
                 iterations++;
             }
-            if (iterations == maxIterations && maxIterations > 0) break;
 
-            // Zamiana miejscami elementów
-            Map<String, E> temp = data.get(selectedIdx);
-            data.set(selectedIdx, data.get(i));
-            data.set(i, temp);
+            data.set(j + 1, current);
         }
 
         long duration = System.nanoTime() - startTime;
-        logger.info("SelectionSort completed in {} ms.", duration / 1_000_000.0);
+        logger.info("InsertionSort completed in {} ms after {} iterations.", duration / 1_000_000.0, iterations);
 
         return Map.of(
                 "sortedData", data,
@@ -70,24 +70,41 @@ public class SelectionSort implements SortingStrategy {
     }
 
     /**
-     * Porównuje dwie wartości implementujące interfejs {@link Comparable}.
+     * Compares two maps based on a list of keys with a priority order.
+     *
+     * @param map1 the first map to compare
+     * @param map2 the second map to compare
+     * @param keys the list of keys defining the priority order for comparison
+     * @return the comparison result: -1, 0, or 1
+     */
+    private <E extends Comparable<E>> int compareByKeys(Map<String, E> map1, Map<String, E> map2, List<String> keys) {
+        for (String key : keys) {
+            E value1 = map1.get(key);
+            E value2 = map2.get(key);
+
+            if (value1 == null || value2 == null) {
+                throw new IllegalArgumentException("Key not found in one of the maps: " + key);
+            }
+
+            int comparison = compareValues(value1, value2);
+            if (comparison != 0) {
+                return comparison;
+            }
+        }
+        return 0; // All keys are equal
+    }
+
+    /**
+     * Pomocnicza metoda do porównywania wartości, obsługuje porównania liczbowe i tekstowe.
      *
      * @param value1 pierwsza wartość do porównania
      * @param value2 druga wartość do porównania
-     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli są równe, 1 jeśli value1 > value2
-     * @throws IllegalArgumentException jeśli typ wartości nie jest obsługiwany
+     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli równy, 1 jeśli value1 > value2
      */
-    private static int compareValues(Comparable value1, Comparable value2) {
-        if (value1 instanceof Integer && value2 instanceof Integer) {
-            return Integer.compare((Integer) value1, (Integer) value2);
-        } else if (value1 instanceof Double && value2 instanceof Double) {
-            return Double.compare((Double) value1, (Double) value2);
-        } else if (value1 instanceof String && value2 instanceof String) {
-            return ((String) value1).compareTo((String) value2);
-        } else {
-            throw new IllegalArgumentException("Unsupported comparison types: " + value1.getClass() + ", " + value2.getClass());
-        }
+    private static <E extends Comparable<E>> int compareValues(E value1, E value2) {
+        return value1.compareTo(value2);
     }
+
 
     /**
      * Sortuje listę elementów przy użyciu algorytmu SelectionSort.
@@ -105,7 +122,6 @@ public class SelectionSort implements SortingStrategy {
         int n = data.size();
         int iterations = 0;
         long startTime = System.nanoTime();
-
         // Implementacja algorytmu Selection Sort dla listy elementów
         for (int i = 0; i < n - 1; i++) {
             int selectedIdx = i;
@@ -125,7 +141,6 @@ public class SelectionSort implements SortingStrategy {
             }
 
             if (iterations == maxIterations && maxIterations > 0) break;
-
             // Zamiana miejscami elementów
             E temp = data.get(selectedIdx);
             data.set(selectedIdx, data.get(i));

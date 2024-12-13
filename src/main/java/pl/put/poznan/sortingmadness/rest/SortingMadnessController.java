@@ -70,20 +70,11 @@ public class SortingMadnessController {
                         .orElse(globalMaxIterations != null ? globalMaxIterations : 0);
 
                 List<Map<String, Comparable>> inputDataCopy = new ArrayList<>(data);
+                Collections.reverse(keysToSort);
 
                 List<Map<String, Object>> tempResult = new ArrayList<>();
-
-                for (int i = 0; i < keysToSort.size(); i++) {
-                    String key = keysToSort.get(i);
-                    Map<String, Object> result = sortingMadness.sortData(inputDataCopy, key, algorithm, direction, maxIterations);
-
-                    if (i == keysToSort.size() - 1) {
-                        tempResult.add(result);
-                    } else {
-                        inputDataCopy = new ArrayList<>((List<Map<String, Comparable>>) result.get("sortedData"));
-
-                    }
-                }
+                Map<String, Object> result = sortingMadness.sortData(inputDataCopy, keysToSort, algorithm, direction, maxIterations);
+                tempResult.add(result);
 
                 finalResult.put(algorithm + "-" + String.join(",", keysToSort) + "-" + direction, tempResult);
             }

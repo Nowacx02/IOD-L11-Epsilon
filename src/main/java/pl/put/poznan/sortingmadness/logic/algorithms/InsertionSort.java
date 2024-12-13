@@ -3,6 +3,7 @@ package pl.put.poznan.sortingmadness.logic.algorithms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.put.poznan.sortingmadness.logic.SortingStrategy;
+import pl.put.poznan.sortingmadness.rest.SortingRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +22,15 @@ public class InsertionSort implements SortingStrategy {
      * Sortuje dane mapowane przy użyciu algorytmu sortowania przez wstawianie.
      *
      * @param data          lista map zawierających dane do posortowania
-     * @param key           klucz używany do pobierania wartości z map w celu porównania
+     * @param keys           klucz używany do pobierania wartości z map w celu porównania
      * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
      * @param maxIterations maksymalna liczba iteracji; 0 oznacza brak ograniczenia
      * @return mapa zawierająca posortowane dane oraz czas wykonania w milisekundach
      * @param <E> typ wartości w mapach, który implementuje {@link Comparable}
      */
     @Override
-    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, String key, String direction, int maxIterations) {
-        logger.info("Starting InsertionSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
+    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, List<String> keys, String direction, int maxIterations) {
+        logger.info("Starting InsertionSort with keys: {}, direction: {}, maxIterations: {}", keys, direction, maxIterations);
 
         int n = data.size();
         int iterations = 0;
@@ -45,10 +46,7 @@ public class InsertionSort implements SortingStrategy {
             while (j >= 0) {
                 if (iterations == maxIterations && maxIterations > 0) break;
 
-                int comparison = compareValues(data.get(j).get(key), current.get(key));
-                if ("desc".equalsIgnoreCase(direction)) {
-                    comparison = -comparison;
-                }
+                int comparison = compareByKeys(data.get(j), current, keys, direction);
 
                 if (comparison <= 0) break;
 
@@ -70,22 +68,46 @@ public class InsertionSort implements SortingStrategy {
     }
 
     /**
+     * Pomocnicza metoda do porównywania dwóch map na podstawie listy kluczy.
+     * Uwzględnia kierunek sortowania.
+     *
+     * @param map1      pierwsza mapa
+     * @param map2      druga mapa
+     * @param keys      lista kluczy do porównania
+     * @param direction kierunek sortowania ("asc" lub "desc")
+     * @return wynik porównania: -1, 0, 1
+     */
+    private static <E extends Comparable<E>> int compareByKeys(Map<String, E> map1, Map<String, E> map2, List<String> keys, String direction) {
+        for (String key : keys) {
+            E value1 = map1.get(key);
+            E value2 = map2.get(key);
+
+            if (value1 == null || value2 == null) {
+                throw new IllegalArgumentException("Null values are not supported for key: " + key);
+            }
+
+            int comparison = compareValues(value1, value2);
+
+            if ("desc".equalsIgnoreCase(direction)) {
+                comparison = -comparison;
+            }
+
+            if (comparison != 0) {
+                return comparison;
+            }
+        }
+        return 0;
+    }
+
+    /**
      * Pomocnicza metoda do porównywania wartości, obsługuje porównania liczbowe i tekstowe.
      *
      * @param value1 pierwsza wartość do porównania
      * @param value2 druga wartość do porównania
-     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli równy, 1 jeśli value1 > value2
+     * @return wynik porównania: -1, 0, 1
      */
-    private static int compareValues(Comparable value1, Comparable value2) {
-        if (value1 instanceof Integer && value2 instanceof Integer) {
-            return Integer.compare((Integer) value1, (Integer) value2);
-        } else if (value1 instanceof Double && value2 instanceof Double) {
-            return Double.compare((Double) value1, (Double) value2);
-        } else if (value1 instanceof String && value2 instanceof String) {
-            return ((String) value1).compareTo((String) value2);
-        } else {
-            throw new IllegalArgumentException("Unsupported comparison types: " + value1.getClass() + ", " + value2.getClass());
-        }
+    private static <E extends Comparable<E>> int compareValues(E value1, E value2) {
+        return value1.compareTo(value2);
     }
 
     /**

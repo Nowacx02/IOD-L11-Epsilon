@@ -23,15 +23,15 @@ public class BubbleSort implements SortingStrategy {
      * Sortuje dane przy użyciu algorytmu sortowania bąbelkowego.
      *
      * @param data          lista map zawierających dane do posortowania
-     * @param key           klucz używany do pobierania wartości z map w celu porównania
+     * @param keys          klucz używany do pobierania wartości z map w celu porównania
      * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
      * @param maxIterations maksymalna liczba iteracji; 0 oznacza brak ograniczenia
      * @return mapa zawierająca posortowane dane oraz czas wykonania w milisekundach
      * @param <E> typ elementów do sortowania, który implementuje {@link Comparable}
      */
     @Override
-    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, String key, String direction, int maxIterations) {
-        logger.info("Starting BubbleSort with key: {}, direction: {}, maxIterations: {}", key, direction, maxIterations);
+    public <E extends Comparable<E>> Map<String, Object> sort(List<Map<String, E>> data, List<String> keys, String direction, int maxIterations) {
+        logger.info("Starting BubbleSort with keys: {}, direction: {}, maxIterations: {}", keys, direction, maxIterations);
 
         int n = data.size();
         boolean swapped;
@@ -42,7 +42,7 @@ public class BubbleSort implements SortingStrategy {
             swapped = false;
 
             for (int j = 0; j < n - i - 1 && (iterations < maxIterations || maxIterations <= 0); j++) {
-                int comparison = compareValues(data.get(j).get(key), data.get(j + 1).get(key));
+                int comparison = compareByKeys(data.get(j), data.get(j + 1), keys);
 
                 if ("desc".equalsIgnoreCase(direction)) {
                     comparison = -comparison;
@@ -75,25 +75,42 @@ public class BubbleSort implements SortingStrategy {
     }
 
     /**
-     * Porównuje dwie wartości, zwracając wynik porównania jako liczbę całkowitą.
-     * <p>
-     * Obsługuje wartości liczb całkowitych, zmiennoprzecinkowych oraz ciągów znaków.
+     * Compares two maps based on a list of keys with a priority order.
      *
-     * @param value1 pierwsza wartość do porównania
-     * @param value2 druga wartość do porównania
-     * @return wynik porównania: -1 jeśli value1 < value2, 0 jeśli są równe, 1 jeśli value1 > value2
-     * @throws IllegalArgumentException jeśli wartości mają nieobsługiwane typy
+     * @param map1 the first map to compare
+     * @param map2 the second map to compare
+     * @param keys the list of keys defining the priority order for comparison
+     * @return the comparison result: -1, 0, or 1
      */
-    private static int compareValues(Comparable value1, Comparable value2) {
-        if (value1 instanceof Integer && value2 instanceof Integer) {
-            return Integer.compare((Integer) value1, (Integer) value2);
-        } else if (value1 instanceof Double && value2 instanceof Double) {
-            return Double.compare((Double) value1, (Double) value2);
-        } else if (value1 instanceof String && value2 instanceof String) {
-            return ((String) value1).compareTo((String) value2);
-        } else {
-            throw new IllegalArgumentException("Unsupported comparison types: " + value1.getClass() + ", " + value2.getClass());
+    private <E extends Comparable<E>> int compareByKeys(Map<String, E> map1, Map<String, E> map2, List<String> keys) {
+        for (String key : keys) {
+            E value1 = map1.get(key);
+            E value2 = map2.get(key);
+
+            if (value1 == null || value2 == null) {
+                throw new IllegalArgumentException("Key not found in one of the maps: " + key);
+            }
+
+            int comparison = compareValues(value1, value2);
+            if (comparison != 0) {
+                return comparison;
+            }
         }
+        return 0; // All keys are equal
+    }
+
+    /**
+     * Compares two values, returning the comparison result as an integer.
+     *
+     * Supports integer, double, and string types.
+     *
+     * @param value1 the first value to compare
+     * @param value2 the second value to compare
+     * @return the comparison result: -1 if value1 < value2, 0 if equal, 1 if value1 > value2
+     * @throws IllegalArgumentException if the values have unsupported types
+     */
+    private static <E extends Comparable<E>> int compareValues(E value1, E value2) {
+        return value1.compareTo(value2);
     }
 
     /**
