@@ -50,7 +50,6 @@ public class SortingMadnessController {
         if (validateData(data)) {
 
             List<String> keysToSort = request.getKeysToSort();
-            Collections.reverse(keysToSort);
             validateKeysToSort(keysToSort, data);
 
             Integer globalMaxIterations = request.getGlobalMaxIterations();
@@ -70,7 +69,6 @@ public class SortingMadnessController {
                         .orElse(globalMaxIterations != null ? globalMaxIterations : 0);
 
                 List<Map<String, Comparable>> inputDataCopy = new ArrayList<>(data);
-                Collections.reverse(keysToSort);
 
                 List<Map<String, Object>> tempResult = new ArrayList<>();
                 Map<String, Object> result = sortingMadness.sortData(inputDataCopy, keysToSort, algorithm, direction, maxIterations);
