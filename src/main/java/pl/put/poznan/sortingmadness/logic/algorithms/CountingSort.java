@@ -22,7 +22,7 @@ public class CountingSort implements SortingStrategy {
      * Sortuje dane mapowane przy użyciu algorytmu sortowania przez liczenie.
      *
      * @param data          lista map zawierających dane do posortowania
-     * @param key           klucz używany do pobierania wartości z map w celu porównania
+     * @param keys          klucz używany do pobierania wartości z map w celu porównania
      * @param direction     kierunek sortowania: "asc" (rosnąco) lub "desc" (malejąco)
      * @param maxIterations maksymalna liczba iteracji; 0 oznacza brak ograniczenia
      * @return mapa zawierająca posortowane dane oraz czas wykonania w milisekundach
