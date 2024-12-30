@@ -7,6 +7,7 @@ import pl.put.poznan.sortingmadness.logic.SortingMadness;
 import pl.put.poznan.sortingmadness.logic.SortingSelector;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Klasa {@code SortingMadnessController} służy jako kontroler REST API dla operacji sortowania danych.
@@ -46,30 +47,36 @@ public class SortingMadnessController {
         logger.debug("Received request: {}", request);
         Map<String, Object> finalResult = new HashMap<>();
 
+        @SuppressWarnings("rawtypes")
         List<Map<String, Comparable>> data = request.getData();
-        if (validateData(data)) {
+        if (request.isRemoveDuplicates() && data != null) {
+            data = data.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
 
+        if (validateData(data)) {
             List<String> keysToSort = request.getKeysToSort();
             validateKeysToSort(keysToSort, data);
 
             Integer globalMaxIterations = request.getGlobalMaxIterations();
-
             List<SortingRequest.SortingParameter> sortingParameters = Optional.ofNullable(request.getSortingParameters())
                     .orElseGet(() -> List.of(new SortingRequest.SortingParameter()));
 
             for (SortingRequest.SortingParameter param : sortingParameters) {
-
                 String direction = Optional.ofNullable(param.getDirections())
                         .orElseThrow(() -> new IllegalArgumentException("Sorting direction must be specified."));
                 boolean dir = "DESC".equals(direction);
 
+                @SuppressWarnings("rawtypes")
+                List<Map<String, Comparable>> finalData = data;
                 String algorithm = Optional.ofNullable(param.getSortingAlgorithms())
-                        .orElseGet(() -> sortingSelector.selectAlgorithmMap(data, keysToSort, dir).toString());
+                        .orElseGet(() -> sortingSelector.selectAlgorithmMap(finalData, keysToSort, dir).toString());
                 int maxIterations = Optional.ofNullable(param.getMaxIterations())
                         .orElse(globalMaxIterations != null ? globalMaxIterations : 0);
 
+                @SuppressWarnings("rawtypes")
                 List<Map<String, Comparable>> inputDataCopy = new ArrayList<>(data);
-
                 List<Map<String, Object>> tempResult = new ArrayList<>();
                 Map<String, Object> result = sortingMadness.sortData(inputDataCopy, keysToSort, algorithm, direction, maxIterations);
                 tempResult.add(result);
@@ -77,9 +84,17 @@ public class SortingMadnessController {
                 finalResult.put(algorithm + "-" + String.join(",", keysToSort) + "-" + direction, tempResult);
             }
         } else {
-            Integer globalMaxIterations = request.getGlobalMaxIterations();
+            // Obsługa listy `dataList`
+            @SuppressWarnings("rawtypes")
             List<Comparable> dataList = request.getDataList();
+            if (request.isRemoveDuplicates() && dataList != null) {
+                dataList = dataList.stream()
+                        .distinct()
+                        .collect(Collectors.toList());
+            }
+
             if (validateDataList(dataList)) {
+                Integer globalMaxIterations = request.getGlobalMaxIterations();
                 List<SortingRequest.SortingParameter> sortingParameters = Optional.ofNullable(request.getSortingParameters())
                         .orElse(List.of(new SortingRequest.SortingParameter()));
 
@@ -88,12 +103,15 @@ public class SortingMadnessController {
                             .orElseThrow(() -> new IllegalArgumentException("Sorting direction must be specified."));
                     boolean dir = "DESC".equals(direction);
 
+                    @SuppressWarnings("rawtypes")
+                    List<Comparable> finalDataList = dataList;
                     String algorithm = Optional.ofNullable(param.getSortingAlgorithms())
-                            .orElseGet(() -> sortingSelector.selectAlgorithmList(dataList, dir).toString());
+                            .orElseGet(() -> sortingSelector.selectAlgorithmList(finalDataList, dir).toString());
 
                     int maxIterations = Optional.ofNullable(param.getMaxIterations())
                             .orElse(globalMaxIterations != null ? globalMaxIterations : 0);
 
+                    @SuppressWarnings("rawtypes")
                     List<Comparable> inputDataCopy = new ArrayList<>(dataList);
                     Map<String, Object> result = sortingMadness.sortDataList(inputDataCopy, algorithm, direction, maxIterations);
                     finalResult.put(algorithm + "-" + direction, result);
@@ -102,6 +120,7 @@ public class SortingMadnessController {
         }
         return finalResult;
     }
+
 
     /**
      * Waliduje dane w formacie listy map.

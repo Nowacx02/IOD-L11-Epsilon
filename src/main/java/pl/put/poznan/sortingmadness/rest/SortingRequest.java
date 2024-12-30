@@ -29,6 +29,18 @@ public class SortingRequest {
     @JsonProperty("globalMaxIterations")
     private Integer globalMaxIterations;
 
+    @JsonProperty("removeDuplicates")
+    private boolean removeDuplicates;
+
+    public boolean isRemoveDuplicates() {
+        return removeDuplicates;
+    }
+
+    public void setRemoveDuplicates(boolean removeDuplicates) {
+        this.removeDuplicates = removeDuplicates;
+    }
+
+
     /**
      * Pobiera klucze, które mają być użyte do sortowania.
      *
