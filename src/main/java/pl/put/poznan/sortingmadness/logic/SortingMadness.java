@@ -33,6 +33,12 @@ public class SortingMadness {
     public Map<String, Object> sortData(List<Map<String, Comparable>> data, List<String> keys, String algorithm, String direction, int maxIterations) {
         logger.info("Starting sortData with algorithm: {}, key: {}, direction: {}, maxIterations: {}",
                 algorithm, keys, direction, maxIterations);
+            if (direction == null || (!direction.equals("ASC") && !direction.equals("DESC"))) {
+                throw new IllegalArgumentException("Sorting direction must be specified.");
+            }
+        if (algorithm == null ) {
+            throw new IllegalArgumentException("Sorting direction must be specified.");
+        }
 
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("Dataset is empty or null.");
@@ -77,7 +83,7 @@ public class SortingMadness {
      * @return instancja klasy implementującej wybrany algorytm sortowania
      * @throws IllegalArgumentException jeśli podana nazwa algorytmu jest nierozpoznana
      */
-    private SortingStrategy getStrategy(String algorithm) {
+    public SortingStrategy getStrategy(String algorithm) {
         switch (algorithm.toLowerCase()) {
             case "bubble":
                 return new BubbleSort();
