@@ -1,6 +1,7 @@
 pl\put\poznan\sortingmadness\logic\algorithms\CountingSort.class
 pl\put\poznan\sortingmadness\logic\algorithms\QuickSort.class
 pl\put\poznan\sortingmadness\rest\SortingMadnessController.class
+pl\put\poznan\sortingmadness\logic\SortingSelector.class
 pl\put\poznan\sortingmadness\logic\algorithms\BubbleSort.class
 pl\put\poznan\sortingmadness\logic\algorithms\SelectionSort.class
 pl\put\poznan\sortingmadness\rest\GlobalExceptionHandler.class

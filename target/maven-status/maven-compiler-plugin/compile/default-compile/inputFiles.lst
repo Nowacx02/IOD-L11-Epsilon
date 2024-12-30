@@ -1,13 +1,13 @@
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\app\SortingMadnessApplication.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\rest\GlobalExceptionHandler.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\SelectionSort.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\MergeSort.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\rest\SortingMadnessController.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\BubbleSort.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\InsertionSort.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\rest\SortingRequest.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\SortingStrategy.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\SortingMadness.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\QuickSort.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\CountingSort.java
-C:\Users\adamn\Desktop\Nowy folder\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\SortingSelector.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\QuickSort.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\MergeSort.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\SortingStrategy.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\app\SortingMadnessApplication.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\rest\SortingRequest.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\SortingSelector.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\rest\SortingMadnessController.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\rest\GlobalExceptionHandler.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\SelectionSort.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\SortingMadness.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\InsertionSort.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\BubbleSort.java
+C:\Users\kolec\Desktop\Nowy folder (7)\IOD-L11-Epsilon\src\main\java\pl\put\poznan\sortingmadness\logic\algorithms\CountingSort.java
