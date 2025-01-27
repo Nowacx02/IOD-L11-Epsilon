@@ -1,1 +1,4 @@
 pl\put\poznan\sortingmadness\BubbleSortTest.class
+pl\put\poznan\sortingmadness\InsertionSortTest.class
+pl\put\poznan\sortingmadness\logic\SortingMadnessTest.class
+pl\put\poznan\sortingmadness\MergeSortTest.class

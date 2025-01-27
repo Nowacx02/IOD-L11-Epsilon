@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: pl.put.poznan.sortingmadness.BubbleSortTest
 -------------------------------------------------------------------------------
-Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 s - in pl.put.poznan.sortingmadness.BubbleSortTest
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.075 s - in pl.put.poznan.sortingmadness.BubbleSortTest

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pl.put.poznan.sortingmadness.MergeSortTest" time="0.006" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.391" tests="10" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,12 +58,14 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="shouldSortStringsAlphabetically" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0"/>
-  <testcase name="shouldHandleEmptyList" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0"/>
-  <testcase name="shouldSortMapsBySingleKey" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0.001"/>
-  <testcase name="shouldHandleSingleElementList" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0.002"/>
-  <testcase name="shouldSortIntegersInDescendingOrder" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0.001"/>
-  <testcase name="shouldThrowExceptionForMissingKeyInMaps" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0"/>
-  <testcase name="shouldSortIntegersInAscendingOrder" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0.001"/>
-  <testcase name="shouldSortMapsByMultipleKeys" classname="pl.put.poznan.sortingmadness.MergeSortTest" time="0"/>
+  <testcase name="testSortData_InvalidDirection" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.344"/>
+  <testcase name="testSortData_MultipleKeys" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.033"/>
+  <testcase name="testSortDataList_EmptyAlgorithm" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.003"/>
+  <testcase name="testSortData_NullData" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.001"/>
+  <testcase name="testSortData_InvalidAlgorithm" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.001"/>
+  <testcase name="testSortDataList_DescendingOrderWithHighIterations" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.002"/>
+  <testcase name="testSortDataList_ValidInput" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.001"/>
+  <testcase name="testSortData_EmptyData" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0"/>
+  <testcase name="testSortDataList2_DescendingOrderWithHighIterations" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.002"/>
+  <testcase name="testSortData_ValidInput" classname="pl.put.poznan.sortingmadness.logic.SortingMadnessTest" time="0.002"/>
 </testsuite>

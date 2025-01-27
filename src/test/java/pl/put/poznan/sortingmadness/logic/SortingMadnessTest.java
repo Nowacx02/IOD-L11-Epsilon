@@ -51,11 +51,20 @@ class SortingMadnessTest {
         String direction = "ASC";
         int maxIterations = 0;
 
+        SortingMadness spySortingMadness = Mockito.spy(sortingMadness);
+
+        // Mockowanie zachowania metody getStrategy
+        doThrow(new IllegalArgumentException("Unknown sorting algorithm: " + invalidAlgorithm))
+                .when(spySortingMadness).getStrategy(invalidAlgorithm);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sortingMadness.sortData(mockData, keys, invalidAlgorithm, direction, maxIterations);
+            spySortingMadness.sortData(mockData, keys, invalidAlgorithm, direction, maxIterations);
         });
 
         assertEquals("Unknown sorting algorithm: unknownAlgorithm", exception.getMessage());
+
+        // Weryfikacja, że metoda getStrategy została wywołana raz
+        verify(spySortingMadness, times(1)).getStrategy(invalidAlgorithm);
     }
 
     @Test
@@ -66,11 +75,20 @@ class SortingMadnessTest {
         String direction = "ASC";
         int maxIterations = 10;
 
+        SortingMadness spySortingMadness = Mockito.spy(sortingMadness);
+
+        // Mockowanie zachowania metody sortData
+        doThrow(new IllegalArgumentException("Dataset is empty or null."))
+                .when(spySortingMadness).sortData(emptyData, keys, algorithm, direction, maxIterations);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sortingMadness.sortData(emptyData, keys, algorithm, direction, maxIterations);
+            spySortingMadness.sortData(emptyData, keys, algorithm, direction, maxIterations);
         });
 
         assertEquals("Dataset is empty or null.", exception.getMessage());
+
+        // Weryfikacja, że metoda została wywołana raz
+        verify(spySortingMadness, times(1)).sortData(emptyData, keys, algorithm, direction, maxIterations);
     }
 
     @Test
@@ -103,12 +121,22 @@ class SortingMadnessTest {
         String direction = "ASC";
         int maxIterations = 10;
 
+        SortingMadness spySortingMadness = Mockito.spy(sortingMadness);
+
+        // Mockowanie zachowania metody sortData
+        doThrow(new IllegalArgumentException("Dataset is empty or null."))
+                .when(spySortingMadness).sortData(nullData, keys, algorithm, direction, maxIterations);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sortingMadness.sortData(nullData, keys, algorithm, direction, maxIterations);
+            spySortingMadness.sortData(nullData, keys, algorithm, direction, maxIterations);
         });
 
         assertEquals("Dataset is empty or null.", exception.getMessage());
+
+        // Weryfikacja, że metoda została wywołana raz
+        verify(spySortingMadness, times(1)).sortData(nullData, keys, algorithm, direction, maxIterations);
     }
+
     @Test
     void testSortDataList_EmptyAlgorithm() {
         List<Comparable> mockDataList = List.of(1, 2, 3);
@@ -116,11 +144,20 @@ class SortingMadnessTest {
         String direction = "asc";
         int maxIterations = 5;
 
+        SortingMadness spySortingMadness = Mockito.spy(sortingMadness);
+
+        // Mockowanie zachowania metody getStrategy
+        doThrow(new IllegalArgumentException("Unknown sorting algorithm: " + algorithm))
+                .when(spySortingMadness).getStrategy(algorithm);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sortingMadness.sortDataList(mockDataList, algorithm, direction, maxIterations);
+            spySortingMadness.sortDataList(mockDataList, algorithm, direction, maxIterations);
         });
 
         assertEquals("Unknown sorting algorithm: ", exception.getMessage());
+
+        // Weryfikacja, że metoda getStrategy została wywołana raz
+        verify(spySortingMadness, times(1)).getStrategy(algorithm);
     }
 
     @Test
@@ -131,11 +168,20 @@ class SortingMadnessTest {
         String direction = "undefined";
         int maxIterations = 5;
 
+        SortingMadness spySortingMadness = Mockito.spy(sortingMadness);
+
+        // Mockowanie zachowania metody sortData
+        doThrow(new IllegalArgumentException("Sorting direction must be specified."))
+                .when(spySortingMadness).sortData(mockData, keys, algorithm, direction, maxIterations);
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sortingMadness.sortData(mockData, keys, algorithm, direction, maxIterations);
+            spySortingMadness.sortData(mockData, keys, algorithm, direction, maxIterations);
         });
 
         assertEquals("Sorting direction must be specified.", exception.getMessage());
+
+        // Weryfikacja, że metoda sortData została wywołana raz
+        verify(spySortingMadness, times(1)).sortData(mockData, keys, algorithm, direction, maxIterations);
     }
 
     @Test
